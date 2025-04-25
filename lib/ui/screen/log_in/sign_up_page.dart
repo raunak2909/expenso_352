@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xpenso/data/model/user_model.dart';
-import 'package:xpenso/log_in/register/register_bloc.dart';
-import 'package:xpenso/log_in/register/register_event.dart';
-import 'package:xpenso/log_in/register/register_state.dart';
-import 'package:xpenso/log_in/sign_in_page.dart';
-import 'package:xpenso/screen/home_page.dart';
-import 'package:xpenso/screen/intro_page.dart';
+import 'package:xpenso/ui/screen/log_in/register/register_bloc.dart';
+import 'package:xpenso/ui/screen/log_in/register/register_event.dart';
+import 'package:xpenso/ui/screen/log_in/register/register_state.dart';
 
 class signUpPage extends StatefulWidget {
   @override
@@ -63,19 +60,11 @@ class _signUpPageState extends State<signUpPage> {
                         fontSize: 31,
                         color: Colors.white),
                   )),
-              const SizedBox(
-                height: 20,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const SizedBox(
-                height: 20,
+              SizedBox(
+                height: 70,
               ),
               Container(
+                height: 50,
                 width: double.infinity,
                 padding: const EdgeInsets.only(left: 21),
                 margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -322,7 +311,7 @@ class _signUpPageState extends State<signUpPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    "Aready have an account?",
+                    "Already have an account?",
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.black,

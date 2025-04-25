@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xpenso/data/local/db_helper.dart';
 import 'package:xpenso/data/repository/user_repository.dart';
-import 'package:xpenso/log_in/register/register_event.dart';
-import 'package:xpenso/log_in/register/register_state.dart';
+import 'package:xpenso/ui/screen/log_in/register/register_event.dart';
+import 'package:xpenso/ui/screen/log_in/register/register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   UserRepository userRepository;

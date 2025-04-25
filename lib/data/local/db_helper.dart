@@ -8,6 +8,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:xpenso/data/model/user_model.dart';
 
 import '../../domain/app_constants.dart';
+import '../model/expense_model.dart';
 
 class DbHelper {
   DbHelper._();
@@ -69,8 +70,7 @@ class DbHelper {
           $EXPENSE_AMOUNT REAL NOT NULL,
           $EXPENSE_BALANCE REAL,
           $EXPENSE_TYPE TEXT NOT NULL,
-          $EXPENSE_CATEGORY TEXT NOT NULL,
-          $EXPENSE_CREATED_AT TEXT NOT NULL
+          $EXPENSE_CATEGORY TEXT NOT NULL
         )
       ''');
       },
@@ -99,20 +99,55 @@ class DbHelper {
 
   ///authenticate USER
   Future<bool> authenticateUser(
-      {String email = "", String mobNo = "", required String pass, bool isEmail = true }) async {
+      {String email = "",
+      String mobNo = "",
+      required String pass,
+      bool isEmail = true}) async {
     var db = await getDB();
 
-    var mData = isEmail ? await db.query(USER_TABLE,
-        where: "$USER_EMAIL = ? and $USER_PASSWORD = ?",
-        whereArgs: [email, pass]) : await db.query(USER_TABLE,
-        where: "$USER_MOBILE = ? and $USER_PASSWORD = ?",
-        whereArgs: [mobNo, pass]);
+    var mData = isEmail
+        ? await db.query(USER_TABLE,
+            where: "$USER_EMAIL = ? and $USER_PASSWORD = ?",
+            whereArgs: [email, pass])
+        : await db.query(USER_TABLE,
+            where: "$USER_MOBILE = ? and $USER_PASSWORD = ?",
+            whereArgs: [mobNo, pass]);
 
-    if(mData.isNotEmpty){
+    if (mData.isNotEmpty) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setInt(AppConstants.USER_ID, UserModel.fromMap(mData[0]).uid ?? 0);
     }
 
     return mData.isNotEmpty;
+  }
+
+  Future<bool> addExpense({required ExpenseModel newExp}) async {
+    var db = await getDB();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int uid = prefs.getInt(AppConstants.USER_ID) ?? 0;
+
+    newExp.uid = uid.toString();
+
+    int rowsEffected = await db.insert(EXPENSE_TABLE, newExp.toMap());
+
+    return rowsEffected > 0;
+  }
+
+  Future<List<ExpenseModel>> fetchAllExpense() async{
+    var db = await getDB();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int uid = prefs.getInt(AppConstants.USER_ID) ?? 0;
+
+    List<Map<String, dynamic>> mExp = await db.query(EXPENSE_TABLE, where: "$USER_ID = ?", whereArgs: [uid]);
+
+    List<ExpenseModel> allExp = [];
+
+    for(Map<String, dynamic> eachExp in mExp){
+      allExp.add(ExpenseModel.fromMap(eachExp));
+    }
+
+    return allExp;
   }
 }

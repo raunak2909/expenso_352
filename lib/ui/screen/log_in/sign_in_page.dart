@@ -2,12 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:xpenso/log_in/login/login_bloc.dart';
-import 'package:xpenso/log_in/login/login_event.dart';
-import 'package:xpenso/log_in/sign_up_page.dart';
-import 'package:xpenso/screen/home_page.dart';
-import 'package:xpenso/screen/intro_page.dart';
+import 'package:xpenso/ui/screen/log_in/sign_up_page.dart';
 
+import '../intro_page.dart';
+import 'login/login_bloc.dart';
+import 'login/login_event.dart';
 import 'login/login_state.dart';
 
 class signInPage extends StatefulWidget {

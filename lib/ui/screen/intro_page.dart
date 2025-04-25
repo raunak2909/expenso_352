@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:xpenso/screen/home_page.dart';
+
+import 'home_page.dart';
 
 class introPage extends StatelessWidget{
   @override

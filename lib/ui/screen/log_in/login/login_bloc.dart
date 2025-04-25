@@ -2,8 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xpenso/data/repository/user_repository.dart';
 import 'package:xpenso/domain/app_constants.dart';
-import 'package:xpenso/log_in/login/login_event.dart';
-import 'package:xpenso/log_in/login/login_state.dart';
+
+import 'login_event.dart';
+import 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState>{
   UserRepository userRepository;

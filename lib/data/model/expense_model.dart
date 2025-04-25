@@ -2,18 +2,18 @@ import '../local/db_helper.dart';
 
 class ExpenseModel {
   int? eid;
-  int uid;
+  String? uid;
   String title;
   String desc;
   num amt;
   num bal;
   String createdAt;
   String type;
-  int catId;
+  String catId;
 
   ExpenseModel({
     this.eid,
-    required this.uid,
+    this.uid,
     required this.title,
     required this.desc,
     required this.amt,

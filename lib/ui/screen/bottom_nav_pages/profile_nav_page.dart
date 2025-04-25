@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:xpenso/log_in/sign_in_page.dart';
+
+import '../log_in/sign_in_page.dart';
 
 class profileBottomPage extends StatelessWidget{
   @override

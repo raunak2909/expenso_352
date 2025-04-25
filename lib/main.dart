@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xpenso/data/local/db_helper.dart';
 import 'package:xpenso/data/repository/user_repository.dart';
-import 'package:xpenso/log_in/register/register_bloc.dart';
-import 'package:xpenso/splash/splash_screen.dart';
-
-import 'log_in/login/login_bloc.dart';
+import 'package:xpenso/ui/screen/bloc/expense_bloc.dart';
+import 'package:xpenso/ui/screen/log_in/login/login_bloc.dart';
+import 'package:xpenso/ui/screen/log_in/register/register_bloc.dart';
+import 'package:xpenso/ui/screen/splash/splash_screen.dart';
 
 void main() {
   runApp(MultiBlocProvider(
@@ -18,6 +18,9 @@ void main() {
           create: (context) => LoginBloc(
               userRepository:
                   UserRepository(dbHelper: DbHelper.getInstance()))),
+      BlocProvider(
+          create: (context) => ExpenseBloc(
+              dbHelper: DbHelper.getInstance())),
     ],
     child: const MyApp(),
   ));
