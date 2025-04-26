@@ -1,7 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:xpenso/data/local/db_helper.dart';
 import 'package:xpenso/data/model/expense_model.dart';
+import 'package:xpenso/data/model/filter_expense_model.dart';
 
+import '../../../data/model/cat_model.dart';
+import '../../../domain/app_constants.dart';
 import 'expense_event.dart';
 import 'expense_state.dart';
 
@@ -16,7 +20,10 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
 
       if (check) {
         List<ExpenseModel> allExp = await dbHelper.fetchAllExpense();
-        emit(ExpenseLoadedState(allExpense: allExp));
+        ///filter acc to type
+        List<FilterExpenseModel> allFilteredExpenses = AppConstants.filterExpenseByType(allExpenses: allExp, type: 1);
+
+        emit(ExpenseLoadedState(allExpense: allFilteredExpenses));
       } else {
         emit(ExpenseErrorState(errorMsg: "Something went wrong"));
       }
@@ -25,7 +32,15 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     on<GetInitialExpenseEvent>((event, emit) async {
       emit(ExpenseLoadingState());
       List<ExpenseModel> allExp = await dbHelper.fetchAllExpense();
-      emit(ExpenseLoadedState(allExpense: allExp));
+
+      ///add filter here
+      List<FilterExpenseModel> allFilteredExpenses = AppConstants.filterExpenseByType(allExpenses: allExp, type: event.type);
+
+      emit(ExpenseLoadedState(allExpense: allFilteredExpenses));
     });
+
+
+
+
   }
 }

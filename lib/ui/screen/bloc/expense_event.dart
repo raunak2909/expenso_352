@@ -7,4 +7,8 @@ class AddExpenseEvent extends ExpenseEvent{
   AddExpenseEvent({required this.newExp});
 }
 
-class GetInitialExpenseEvent extends ExpenseEvent{}
+class GetInitialExpenseEvent extends ExpenseEvent{
+  int type;
+  GetInitialExpenseEvent({this.type=1});
+
+}

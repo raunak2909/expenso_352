@@ -20,8 +20,8 @@ class _homeBottomPageState extends State<homeBottomPage> {
   List<FilterExpenseModel> allFilteredExpenses = [];
   DateFormat df = DateFormat.yMMMEd();
   List<String> mExpenseFilterType = ["Date wise", "Month wise", "Year wise", "Cat wise"];
-
-  String selectedFilterType = "This Date";
+  bool isFirsTime = true;
+  String selectedFilterType = "Date wise";
   //DateFormat dmf = DateFormat.yMMM();
   //DateFormat dyf = DateFormat.y();
 
@@ -51,8 +51,14 @@ class _homeBottomPageState extends State<homeBottomPage> {
           }
 
           if (state is ExpenseLoadedState) {
+
+            allFilteredExpenses = state.allExpense;
+
             ///filter data here
-            //filterExpenseByType(allExpenses: state.allExpense, type: 4);
+           /* if(isFirsTime) {
+              filterExpenseByType(allExpenses: state.allExpense, type: 1);
+              isFirsTime = false;
+            }*/
 
             return SingleChildScrollView(
               child: Padding(
@@ -143,25 +149,13 @@ class _homeBottomPageState extends State<homeBottomPage> {
                           ),
                           onSelected: (value){
                             if(value=="Date wise"){
-                              filterExpenseByType(allExpenses: state.allExpense, type: 1);
-                              setState(() {
-
-                              });
+                              context.read<ExpenseBloc>().add(GetInitialExpenseEvent(type: 1));
                             } else if(value =="Month wise"){
-                              filterExpenseByType(allExpenses: state.allExpense, type: 2);
-                              setState(() {
-
-                              });
+                              context.read<ExpenseBloc>().add(GetInitialExpenseEvent(type: 2));
                             } else if(value == "Year wise"){
-                              filterExpenseByType(allExpenses: state.allExpense, type: 3);
-                              setState(() {
-
-                              });
+                              context.read<ExpenseBloc>().add(GetInitialExpenseEvent(type: 3));
                             } else {
-                              filterExpenseByType(allExpenses: state.allExpense, type: 4);
-                              setState(() {
-
-                              });
+                              context.read<ExpenseBloc>().add(GetInitialExpenseEvent(type: 4));
                             }
                           },
                           textStyle: TextStyle(fontSize: 14,fontFamily: "Poppins",fontWeight: FontWeight.bold),
@@ -405,90 +399,5 @@ class _homeBottomPageState extends State<homeBottomPage> {
     );
   }
 
-  void filterExpenseByType({required List<ExpenseModel> allExpenses, int type = 1}) {
-    ///1 -> date-wise, 2 -> month-wise, 3 -> year-wise, 4 -> cat-wise
-    if(type<4) {
-      if(type==1){
-        df = DateFormat.yMMMEd();
-      } else if(type==2){
-        df = DateFormat.yMMM();
-      } else {
-        df = DateFormat.y();
-      }
 
-      allFilteredExpenses.clear();
-
-      List<String> uniqueMonths = [];
-
-      ///date wise
-      ///month wise ?
-      ///year wise ?
-      ///cat wise ? (additional)
-      for (ExpenseModel eachExp in allExpenses) {
-        String date = df.format(
-            DateTime.fromMillisecondsSinceEpoch(int.parse(eachExp.createdAt)));
-        if (!uniqueMonths.contains(date)) {
-          uniqueMonths.add(date);
-        }
-      }
-      print(uniqueMonths);
-
-      for (String eachDate in uniqueMonths) {
-        num eachDateTotalAmt = 0.0;
-        List<ExpenseModel> eachDateExpenses = [];
-
-        for (ExpenseModel eachExp in allExpenses) {
-          String date = df.format(
-              DateTime.fromMillisecondsSinceEpoch(
-                  int.parse(eachExp.createdAt)));
-
-          if (eachDate == date) {
-            eachDateExpenses.add(eachExp);
-
-            if (eachExp.type == 'Debit') {
-              eachDateTotalAmt -= eachExp.amt;
-            } else {
-              eachDateTotalAmt += eachExp.amt;
-            }
-          }
-        }
-
-        allFilteredExpenses.add(FilterExpenseModel(
-            type: eachDate,
-            totalAmt: eachDateTotalAmt,
-            mExpenses: eachDateExpenses));
-      }
-    } else {
-      ///cat-wise
-      allFilteredExpenses.clear();
-
-      for(CategoryModel eachCat in AppConstants.mCat){
-        num eachCatTotalAmt = 0.0;
-        List<ExpenseModel> eachCatExpenses = [];
-
-        for(ExpenseModel eachExp in allExpenses){
-
-          if(eachCat.id==int.parse(eachExp.catId)){
-            eachCatExpenses.add(eachExp);
-
-            if(eachExp.type=='Debit'){
-              eachCatTotalAmt -= eachExp.amt;
-            } else {
-              eachCatTotalAmt += eachExp.amt;
-            }
-
-          }
-
-        }
-        if(eachCatExpenses.isNotEmpty) {
-          allFilteredExpenses.add(FilterExpenseModel(type: eachCat.name,
-              totalAmt: eachCatTotalAmt,
-              mExpenses: eachCatExpenses));
-        }
-      }
-
-    }
-
-    //print(allFilteredExpenses[0].mExpenses[2].title);
-  }
 }
