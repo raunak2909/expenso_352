@@ -13,7 +13,7 @@ class homePage extends StatefulWidget {
 }
 
 class _homePageState extends State<homePage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   void onItemTapped(int index) {
     setState(() {
