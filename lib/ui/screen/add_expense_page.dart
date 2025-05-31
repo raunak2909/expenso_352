@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xpenso/data/model/expense_model.dart';
 import 'package:xpenso/domain/app_constants.dart';
 import 'package:xpenso/ui/screen/bloc/expense_bloc.dart';
@@ -169,14 +170,23 @@ class _AddExpensePageState extends State<AddExpensePage> {
               height: 21,
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async{
                 if (selectedCatIndex != -1) {
+
+                  num balance = await updateBal();
+
+                  if(selectedType=="Debit"){
+                    balance-=double.parse(amtController.text);
+                  } else {
+                    balance+=double.parse(amtController.text);
+                  }
+
                   context.read<ExpenseBloc>().add(AddExpenseEvent(
                       newExp: ExpenseModel(
                           title: titleController.text,
                           desc: descController.text,
                           amt: double.parse(amtController.text),
-                          bal: 0,
+                          bal: balance,
                           createdAt: (selectedDateTime ?? DateTime.now())
                               .millisecondsSinceEpoch
                               .toString(),
@@ -215,6 +225,12 @@ class _AddExpensePageState extends State<AddExpensePage> {
         ),
       ),
     );
+  }
+
+  Future<num> updateBal() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    num bal = prefs.getDouble("bal") ?? 0.0;
+    return bal;
   }
 
   InputDecoration mDecoration({required String label, required String hint}) =>
