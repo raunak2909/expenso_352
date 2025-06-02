@@ -24,8 +24,8 @@ class introPage extends StatelessWidget{
                     ],
                   ),
                   Container(
-                    width: double.infinity,
-                    height: 350,
+                    width: MediaQuery.of(context).size.width-100,
+                    height: MediaQuery.of(context).size.height*0.4,
                     margin: EdgeInsets.only(bottom: 50),
                     padding: const EdgeInsets.only(top: 20,left: 20,right: 20,bottom: 20),
                     decoration: BoxDecoration(
@@ -76,12 +76,14 @@ class introPage extends StatelessWidget{
 
                 ],
               ),
-              Positioned(
-                  bottom: 200,
-                  child: SizedBox(
-                      height: 480,
-                      width: 320,
-                      child: Image.asset("asset/image/monety_bg.png",fit: BoxFit.cover,))),
+             MediaQuery.of(context).orientation == Orientation.landscape ? Positioned(
+               left: -30,
+                 child: buildAppLogo(context)) :  Padding(
+               padding: const EdgeInsets.only(bottom: 150.0),
+               child: Align(
+                   alignment: Alignment.center,
+                   child: buildAppLogo(context)),
+             ),
               Positioned(
                 right: 0,
                 bottom: 12,
@@ -113,4 +115,9 @@ class introPage extends StatelessWidget{
       ),
     );
   }
+
+  Widget buildAppLogo(BuildContext context) => SizedBox(
+      height: MediaQuery.of(context).size.height*0.55,
+      width: MediaQuery.of(context).size.height*0.55,
+      child: Image.asset("asset/image/monety_bg.png",fit: BoxFit.cover,));
 }
